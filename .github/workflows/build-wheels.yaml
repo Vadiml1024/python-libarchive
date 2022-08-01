@@ -1,17 +1,18 @@
 name: build-wheels
 
 on:
-  workflow-dispatch:
+  workflow_dispatch:
     branches:
       - master
       - extended
 
 jobs:
-  Manylinux-Wheels:
+  many_linux_wheels:
+    name: manylinux-wheels
     runs-on: ubuntu-latest
     container: quay.io/pypa/manylinux2014_x86_64
     steps:
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
 
     - name: Print System Information
       run: |
@@ -40,7 +41,7 @@ jobs:
     - name: Build libarchive C sources
       run: |
         git clone  git clone https://github.com/libarchive/libarchive.git libarchive-src    
-        cd libarchive-src; git checkout 3-5
+        cd libarchive-src; git checkout 3.5
         mkdir build; cd build
         cmake ../
         make -j$(nproc);  make install
@@ -51,14 +52,14 @@ jobs:
       run: |
         rm -rf build wheelhouse
         touch libarchive/_libarchive.i
-        make clean
         export LD_LIBRARY_PATH=/usr/local/lib64/:/usr/local/lib:$LD_LIBRARY_PATH
-        make install
+        export LIBARCHIVE_PREFIX=/usr/local
+        python3 setup.py install
 
 
     - name: Build wheels
       run: |
-        make wheel
+        pip wheel --wheel-dir dist/ .
         auditwheel repair dist/*.whl
         python3 -m pip install --force-reinstall wheelhouse/*,whl
 
