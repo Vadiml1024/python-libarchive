@@ -48,12 +48,8 @@ else:
 
 
 name = 'python-libarchive'
-version = '4.0.1'
-release = '1'
-versrel = version + '-' + release
+version = '4.1.5'
 readme = 'README.rst'
-download_url = "http://" + name + ".googlecode.com/files/" + name + "-" + \
-                                                          versrel + ".tar.gz"
 repourl = 'https://github.com/smartfile/python-libarchive'
 long_description = open(readme).read()
 
@@ -83,15 +79,15 @@ class build_ext_extra(build_ext, object):
 
 if libarchivePrefix:
     extra_compile_args = ['-I{0}/include'.format(libarchivePrefix)]
-    extra_link_args = ['-Wl,-rpath={0}/lib'.format(libarchivePrefix)]
+    extra_link_args = ['-Wl,-rpath,{0}/lib'.format(libarchivePrefix)]
     environ['LDFLAGS'] = '-L{0}/lib {1}'.format(libarchivePrefix, environ.get('LDFLAGS', ''))
 else:
     extra_compile_args = []
-    extra_link_args = ['-l:libarchive.so.18']
+    extra_link_args = ['-l:libarchive.so']
 
 __libarchive = Extension(
     name='libarchive.__libarchive',
-    sources=['libarchive/_libarchive.i'],
+    sources=['libarchive/_libarchive_wrap.c'],
     libraries=['archive'],
     extra_compile_args=extra_compile_args,
     extra_link_args=extra_link_args,
@@ -101,15 +97,14 @@ __libarchive = Extension(
 
 setup(
     name=name,
-    version=versrel,
+    version=version,
     description='A libarchive wrapper for Python supporting password protection.',
     long_description=long_description,
     license='BSD-style license',
     platforms=['any'],
     author='Vadim Lebedev, Ben Timby, Travis Cunningham, Ryan Johnston, SmartFile',
-    author_email='vadiml1024@gmail.com',
+    author_email='tech@smartfile.com',
     url=repourl,
-    download_url=download_url,
     packages=['libarchive'],
     classifiers=[
         'Development Status :: 4 - Beta',
