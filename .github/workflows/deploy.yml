@@ -36,11 +36,19 @@ jobs:
     - name: Install python tools
       run: |
         python3 -m pip install pytest auditwheel
+<<<<<<< HEAD
     
     - name: Build libarchive C sources
       run: |
         cd /tmp
         git clone https://github.com/libarchive/libarchive.git libarchive-src    
+=======
+  
+    - name: Build libarchive C sources
+      run: |
+        cd /tmp
+        git clone https://github.com/libarchive/libarchive.git libarchive-src
+>>>>>>> Integrate embedding of  libarchive.so and dependencies int to the deploy workflow
         cd libarchive-src; git checkout ${{ env.libarchive_tag }}
         mkdir build-libarchive; cd build-libarchive
         cmake ../
@@ -66,5 +74,3 @@ jobs:
         password: ${{ secrets.PYPI_API_TOKEN }}
         wheel_files: wheelhouse/*.whl
         dry_run: true
-
-
