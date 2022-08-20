@@ -1,8 +1,13 @@
 name: Build and upload to PyPI using cibuildwheel
 
 # Build on every branch push, tag push, and pull request change:
-on: [push, pull_request, workflow_dispatch]
-branches: [cibuildwheel]
+on: 
+  push:
+      braches:
+        - cibuildwheel
+  pull_request
+  workflow_dispatch
+  
 # Alternatively, to publish when a (published) GitHub Release is created, use the following:
 # on:
 #   push:
@@ -43,7 +48,7 @@ jobs:
 
 
     - name: Build wheels
-        uses: pypa/cibuildwheel@v2.9.0
+      uses: pypa/cibuildwheel@v2.9.0
         
 
     - uses: actions/upload-artifact@v3
