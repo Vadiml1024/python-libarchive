@@ -18,7 +18,7 @@ on:
 
 env:
   libarchive_tag: v3.6.1
-  CIBW_ENVIRONMENT: INCLUDE=/usr/local/include LD_LIBRARY_PATH=/usr/local/lib LIB=/usr/local/lib LIBARCHIVE_PREFIX=/usr/local
+  CIBW_ENVIRONMENT: INCLUDE=/usr/local/include LIB=/usr/local/lib LIBARCHIVE_PREFIX=/usr/local
 
 jobs:
   build_wheels:
