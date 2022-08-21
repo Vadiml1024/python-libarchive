@@ -24,35 +24,14 @@ jobs:
   build_wheels:
     name: Build wheels on
     runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux2014_x86_64
     steps:
-
-    - name: Install dependencies
-      run: |
-        yum install -y epel-release libxml2-devel libzstd-devel xz-devel bzip2-devel
-        yum install -y libacl-devel lz4-devel e2fsprogs-devel libb2-devel lzo-devel openssl-devel
-        yum install -y librichacl-devel swig strace
-
-    - name: Build libarchive C sources
-      run: |
-        cd /tmp
-        git clone https://github.com/libarchive/libarchive.git libarchive-src    
-        cd libarchive-src; git checkout ${{ env.libarchive_tag }}
-        mkdir build-libarchive; cd build-libarchive
-        cmake ../
-        make -j$(nproc);  make install
-        cd $GITHUB_WORKSPACE
-
-
-    - uses: actions/checkout@v3
-
 
     - name: Build wheels
       uses: pypa/cibuildwheel@v2.9.0
       env:
         CIBW_ENVIRONMENT: INCLUDE=/usr/local/include  LIBARCHIVE_PREFIX=/usr/local
         CIBW_PYTHON_VERSIONS: 3.8,3.9,3.10
-      
+        CIBW_BEFORE_ALL: bash -x build-libarhive-lib.sh centos ${{ env.libarchive_tag }}
         
 
     - uses: actions/upload-artifact@v3
